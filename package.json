@@ -1,0 +1,29 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Module 12 Challenge",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newprice247/Employee-Tracker.git"
+  },
+  "keywords": [
+    "MySQL",
+    "employee",
+    "tracker",
+    "node.js"
+  ],
+  "author": "Nathaniel Price",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newprice247/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/newprice247/Employee-Tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.2.6",
+    "mysql2": "^3.6.1"
+  }
+}
