@@ -2,34 +2,50 @@ const inquirer = require('inquirer');
 // const express = require('express')
 const creds = require('./config/.credentials')
 const mysql = require('mysql2');
+// const createConnection = require('./config/connection')
 const questions = require('./config/questions')
+const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
 // const app = express();
-const PORT = process.env.PORT || 3001;
 // const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
 
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.json())
 const viewTable = (tableName) => {
-    const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
     db.promise().query(`SELECT * FROM ${tableName}`)
                 .then(([rows, fields]) => {
                     console.log(rows)
                 })
                 .catch(console.log)
-                .then(() => db.end())
+                .then(() => startProgram())
 }
 
-inquirer
+const startProgram = () => {
+    inquirer
     .prompt(questions)
-    .then((data) => {
-        if (data.start === 'View all departments') {
-            viewTable('departments')
-        } else if (data.start === 'View all roles') {
-            viewTable('roles')
-        } else if (data.start === 'View all employees') {
-            viewTable('employees')
+    .then((answers) => {
+        switch (answers.start) {
+            
+            case 'View all departments':
+                viewTable('departments');
+                break;
+            case 'View all roles':
+                viewTable('roles');
+                break;
+            case 'View all employees':
+                viewTable('employees')
+                break;
+            // case 'Add a Department':
+                
+            //     break;
+            case 'Disconnect':
+                db.end()
+                break;
         }
     })
+}
+
+startProgram()
+
 
 // app.get('/api/departments', (req, res) => {
 //     db.promise().query("SELECT * FROM DEPARTMENTS")
@@ -72,11 +88,12 @@ inquirer
 //     db.promise().query(`SELECT ${column}, id AS value FROM ${table}`)
 //         .then(([rows, fields]) => {
 //         console.log('...');
-//         console.log(rows, fields);
 //         const results = { rows, fields }
 //         return results;
-//         }
-//     )
+//         })
+//         .then((results) => console.log(results))
+//         .then(() => db.end())
+    
 // }
 
 // returnList('roles', 'salary');
