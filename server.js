@@ -19,6 +19,19 @@ const viewTable = (tableName) => {
                 .then(() => startProgram())
 }
 
+const addDepartment = (newDepartment) => {
+    db.promise().query(`INSERT INTO departments(name) VALUES('${newDepartment}')`)
+        .then(() => console.log(`${JSON.stringify(newDepartment)} was successfully added as a department`))
+        .then(() => startProgram())
+}
+
+const promiseList = (table, column) => {
+    return new Promise((resolve, reject) => {
+        db.promise()
+        .query(`SELECT `)
+    })
+}
+
 const startProgram = () => {
     inquirer
     .prompt(questions)
@@ -34,9 +47,9 @@ const startProgram = () => {
             case 'View all employees':
                 viewTable('employees')
                 break;
-            // case 'Add a Department':
-                
-            //     break;
+            case 'Add a department':
+                addDepartment(answers.addDepartment)
+                break;
             case 'Disconnect':
                 db.end()
                 break;
