@@ -33,7 +33,7 @@ const addRolePrompt = [
     },
     {
         type: "list",
-        name: "roledepartment",
+        name: "roleDepartment",
         message: "Which department does this role belong to?"
     }
 ]

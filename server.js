@@ -23,7 +23,7 @@ const viewTable = (tableName) => {
 
 const addRole = (roleTitle, roleSalary, roleDepartment) => {
     db.promise().query(`INSERT INTO roles(title, salary, department_id) VALUES('${roleTitle}', '${roleSalary}', ${roleDepartment} )`)
-        .then(() => console.log(`${JSON.stringify(roleTitle)} was successfully added as a role to the ${roleDepartment} department`))
+        .then(() => console.log(`The role ${JSON.stringify(roleTitle)} was successfully added`))
         .then(() => startProgram())
 }
 
@@ -46,6 +46,7 @@ const promiseList = (table, column) => {
 
 
 
+
 const startProgram = () => {
     inquirer
     .prompt(questions)
@@ -65,7 +66,7 @@ const startProgram = () => {
                 addDepartment(answers.addDepartment)
                 break;
             case 'Add a role':
-                promiseList("roles", "name")
+                promiseList("departments", "name")
                 .then((results) => {
                     addRolePrompt[2].choices = results;
                     return inquirer.prompt(addRolePrompt)
