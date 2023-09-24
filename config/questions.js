@@ -17,14 +17,25 @@ const questions = [
         name: 'addDepartment',
         message: 'What would you like your department to be called?',
         when: (answers) => answers.start === 'Add a department'
-    },
-    {
-        type: 'list',
-        name: 'addRole',
-        message: 'What department would you like to add a role to?',
-        choices: ,
-        when: (answers) => answers.start === 'Add a role'
     }
 ]
 
-module.exports = questions
+const addRolePrompt = [
+    {
+        type: "input",
+        name: "roleTitle",
+        message: "What is the title of the role?"
+    },
+    {
+        type: "number",
+        name: "roleSalary",
+        message: "What is the yearly salary for this role?"
+    },
+    {
+        type: "list",
+        name: "roledepartment",
+        message: "Which department does this role belong to?"
+    }
+]
+
+module.exports ={ questions, addRolePrompt }

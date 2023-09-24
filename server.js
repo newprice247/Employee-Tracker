@@ -3,8 +3,10 @@ const inquirer = require('inquirer');
 const creds = require('./config/.credentials')
 const mysql = require('mysql2');
 // const createConnection = require('./config/connection')
-const questions = require('./config/questions')
+const { questions, addRolePrompt } = require('./config/questions')
+const { Department, Role, Employee } = require('./config/class')
 const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
+
 // const app = express();
 // const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
 
@@ -19,18 +21,30 @@ const viewTable = (tableName) => {
                 .then(() => startProgram())
 }
 
+const addRole = (roleTitle, roleSalary, roleDepartment) => {
+    db.promise().query(`INSERT INTO roles(title, salary, department_id) VALUES('${roleTitle}', '${roleSalary}', ${roleDepartment} )`)
+        .then(() => console.log(`${JSON.stringify(roleTitle)} was successfully added as a role to the ${roleDepartment} department`))
+        .then(() => startProgram())
+}
+
 const addDepartment = (newDepartment) => {
     db.promise().query(`INSERT INTO departments(name) VALUES('${newDepartment}')`)
         .then(() => console.log(`${JSON.stringify(newDepartment)} was successfully added as a department`))
-        .then(() => startProgram())
+        .then(() => startProgram());
 }
 
 const promiseList = (table, column) => {
     return new Promise((resolve, reject) => {
         db.promise()
-        .query(`SELECT `)
-    })
-}
+        .query(`SELECT ${column}, id AS value FROM ${table}`)
+        .then(([rows, fields]) => {
+            resolve(rows);
+        })
+        .catch((err) => reject(err));
+    });
+};
+
+
 
 const startProgram = () => {
     inquirer
@@ -49,6 +63,16 @@ const startProgram = () => {
                 break;
             case 'Add a department':
                 addDepartment(answers.addDepartment)
+                break;
+            case 'Add a role':
+                promiseList("roles", "name")
+                .then((results) => {
+                    addRolePrompt[2].choices = results;
+                    return inquirer.prompt(addRolePrompt)
+                })
+                .then((answers) => {
+                    addRole(answers.roleTitle, answers.roleSalary, answers.roleDepartment)
+                })
                 break;
             case 'Disconnect':
                 db.end()
