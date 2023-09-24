@@ -3,7 +3,7 @@ VALUES ("Customer Service"),
        ("Meat Department"),
        ("Produce");
        
-INSERT INTO roles (title, salary, department_id)
+INSERT INTO roles (name, salary, department_id)
 VALUES ("Cashier", 35000, 1),
        ("Meat Cutter", 45000, 2),
        ("Produce Clerk", 38000, 3);

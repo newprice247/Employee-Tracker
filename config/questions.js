@@ -38,4 +38,22 @@ const addRolePrompt = [
     }
 ]
 
-module.exports ={ questions, addRolePrompt }
+const addEmployeePrompt = [
+    {
+        type: "input",
+        name: "first_name",
+        message: "What is the employee's first name?"
+    },
+    {
+        type: "input",
+        name: "last_name",
+        message: "What is the employee's last name?"
+    },
+    {
+        type: "list",
+        name: "employeeRole",
+        message: "What is the employee's role or position?"
+    }
+]
+
+module.exports ={ questions, addRolePrompt, addEmployeePrompt }
