@@ -10,7 +10,8 @@ const db = mysql.createConnection(creds, console.log(`Connected to the Employee 
 const viewTable = (tableName) => {
     db.promise().query(`SELECT * FROM ${tableName}`)
                 .then(([rows, fields]) => {
-                    console.log(rows)
+                    console.clear()
+                    console.table(rows)
                 })
                 .catch(console.log)
                 .then(() => startProgram())
@@ -18,26 +19,32 @@ const viewTable = (tableName) => {
 
 const addDepartment = (newDepartment) => {
     db.promise().query(`INSERT INTO departments(name) VALUES('${newDepartment}')`)
+        .then(() => console.clear())
         .then(() => console.log(`${JSON.stringify(newDepartment)} was successfully added as a department`))
         .then(() => startProgram());
 }
 
 const addRole = (roleTitle, roleSalary, roleDepartment) => {
     db.promise().query(`INSERT INTO roles(title, salary, department_id) VALUES('${roleTitle}', '${roleSalary}', ${roleDepartment} )`)
+        .then(() => console.clear())
         .then(() => console.log(`The role ${JSON.stringify(roleTitle)} was successfully added`))
         .then(() => startProgram())
 }
 
 const addEmployee = (first_name, last_name, employeeRole) => {
     db.promise().query(`INSERT INTO employees(first_name, last_name, role_id) VALUES('${first_name}', '${last_name}', ${employeeRole})`)
-        .then(() => console.log(`${JSON.stringify(first_name)} ${JSON.stringify(last_name)} added as an employee`))
-        .then(() => startProgram())
+        .then(() => console.clear())
+        .then(() => {
+            console.log(`${JSON.stringify(first_name)} ${JSON.stringify(last_name)} added as an employee`)
+            startProgram()
+        })
+
 }
 
 const promiseList = (table, column) => {
     return new Promise((resolve, reject) => {
         db.promise()
-        .query(`SELECT ${column}, id AS value FROM ${table}`)
+        .query(`SELECT ${column} AS name, id AS value FROM ${table}`)
         .then(([rows, fields]) => {
             resolve(rows);
         })
@@ -76,7 +83,7 @@ const startProgram = () => {
                     })
                 break;
             case 'Add an employee':
-                promiseList("roles", "name")
+                promiseList("roles", "title")
                     .then((results) => {
                         console.log(results)
                         addEmployeePrompt[2].choices = results;
@@ -85,6 +92,7 @@ const startProgram = () => {
                     .then((answers) => {
                         addEmployee(answers.first_name, answers.last_name, answers.employeeRole)
                     })
+                    break;
             case 'Disconnect':
                 db.end()
                 break;
