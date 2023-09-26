@@ -9,7 +9,7 @@ const iPrompts = {
             choices: ['View all departments',
                 'View all roles',
                 'View all employees',
-                'View all managers',
+                'View employees by manager',
                 'Add a department',
                 'Add a role',
                 'Add an employee',

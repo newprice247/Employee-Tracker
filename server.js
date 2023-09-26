@@ -24,10 +24,13 @@ const viewTable = (tableName) => {
             break;
         case 'employees':
             query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee,
-            roles.title AS Role
+            roles.title AS Role,
+            departments.name AS Department
             FROM employees 
             JOIN roles
-            ON employees.role_id = roles.id`
+            ON employees.role_id = roles.id
+            RIGHT JOIN departments
+            ON roles.department_id = departments.id`
             break;
         case 'managers':
             query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Manager,
@@ -35,7 +38,15 @@ const viewTable = (tableName) => {
             FROM employees 
             JOIN roles
             ON employees.role_id = roles.id
-            WHERE employees.manager_id is null`
+            WHERE employees.manager_id is NULL`
+            break;
+        case 'employees by manager':
+            query = `SELECT
+            CONCAT(employees.first_name, ' ', employees.last_name) AS Employee,
+            CONCAT(managers.first_name, ' ', managers.last_name)  AS Manager
+            FROM employees
+            INNER JOIN employees as managers
+            ON employees.manager_id = managers.id`
     }
     console.clear()
     db.promise().query(query)
@@ -127,8 +138,8 @@ const startProgram = () => {
                 case 'View all employees':
                     viewTable('employees')
                     break;
-                case 'View all managers':
-                    viewTable('managers')
+                case 'View employees by manager':
+                    viewTable('employees by manager')
                     break;
                 case 'Add a department':
                     //Pulls data from the questions.addDepartment prompt and inserts the new department into the database

@@ -44,7 +44,9 @@
 
   ## Usage
 * Once the prerequisite files are installed, locate the 'Employee-Tracker' folder inside your terminal, and run 'npm start'
-  
+
+    [Click here to view the app in action](https://drive.google.com/file/d/1TrxnsZv5zZhxFxpnwEMd-gijA4BfQGOi/view)
+  ![Alt text](<Untitled_ Sep 26, 2023 4_01 PM.gif>)
 
   ## Credits
 
@@ -55,14 +57,11 @@
 
   [MIT](https://opensource.org/licenses/MIT)
 
-  ## Tests
-
-  
 
   ## Questions
   
   Reach out to me if you have any questions about the project!
   
-  [Github: newprice247 @ Github](https://github.com/newprice247)
+  Github: [https://github.com/newprice247](https://github.com/newprice247)
   
   Email: newprice247@gmail.com
