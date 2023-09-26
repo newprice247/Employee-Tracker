@@ -13,7 +13,6 @@ const iPrompts = {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Add a manager',
                 'Update an employee role',
                 'Disconnect']
         },
@@ -63,27 +62,14 @@ const iPrompts = {
             name: "employeeRole",
             message: "What is the employee's role or position?",
             choices: []
-        }
-    ],
-    //Prompts for the 'Add a manager' function of the app
-    addManagerPrompt: [
-        {
-            type: "input",
-            name: "first_name",
-            message: "What is the manager's first name?"
         },
-        {
-            type: "input",
-            name: "last_name",
-            message: "What is the manager's last name?"
-        },
-        //Pulls the data from the promiseList function and stores it in the empty 'choices' array
         {
             type: "list",
-            name: "managerDept",
-            message: "What department are they managing?",
+            name: "confirmManager",
+            message: "Who is this employee's manager",
             choices: []
         }
+
     ],
     //Prompts for the 'Update an employee role' function of the app
     updateEmployeePrompt: [
@@ -97,6 +83,12 @@ const iPrompts = {
             type: 'list',
             name: 'updateRole',
             message: "What is the employee's new role?",
+            choices: []
+        },
+        {
+            type: "list",
+            name: "confirmManager",
+            message: "Who is this employee's new manager",
             choices: []
         }
     ]
