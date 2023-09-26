@@ -17,17 +17,17 @@ CREATE TABLE roles (
     department_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (department_id) REFERENCES departments(id) 
-    ON DELETE
-    SET NULL
+    ON DELETE SET NULL
 );
 
-CREATE TABLE employees (
+CREATE TABLE managers (
     id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    role_id INT,
-    manager_id INT,
+    department_id INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE
-    SET NULL
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+    ON DELETE SET NULL
 );
+
+ 
