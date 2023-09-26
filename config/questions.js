@@ -1,5 +1,6 @@
-
+//Object storing the various prompts for use in the app
 const iPrompts = {
+    //Main menu
     questions: [
         {
             type: 'list',
@@ -16,6 +17,7 @@ const iPrompts = {
                 'Update an employee role',
                 'Disconnect']
         },
+        //When 'Add a department' is chosen, this prompt will trigger
         {
             type: 'input',
             name: 'addDepartment',
@@ -23,6 +25,7 @@ const iPrompts = {
             when: (answers) => answers.start === 'Add a department'
         }
     ],
+    //Prompt for the 'Add a role' function of the app
     addRolePrompt: [
         {
             type: "input",
@@ -34,12 +37,15 @@ const iPrompts = {
             name: "roleSalary",
             message: "What is the yearly salary for this role?"
         },
+        //Pulls the data from the promiseList function and stores it in the empty 'choices' array
         {
             type: "list",
             name: "roleDepartment",
-            message: "Which department does this role belong to?"
+            message: "Which department does this role belong to?",
+            choices: []
         }
     ],
+    //Prompt for the 'Add an employeed' function of the app
     addEmployeePrompt: [
         {
             type: "input",
@@ -51,12 +57,15 @@ const iPrompts = {
             name: "last_name",
             message: "What is the employee's last name?"
         },
+        //Pulls the data from the promiseList function and stores it in the empty 'choices' array
         {
             type: "list",
             name: "employeeRole",
-            message: "What is the employee's role or position?"
+            message: "What is the employee's role or position?",
+            choices: []
         }
     ],
+    //Prompts for the 'Add a manager' function of the app
     addManagerPrompt: [
         {
             type: "input",
@@ -68,6 +77,7 @@ const iPrompts = {
             name: "last_name",
             message: "What is the manager's last name?"
         },
+        //Pulls the data from the promiseList function and stores it in the empty 'choices' array
         {
             type: "list",
             name: "managerDept",
@@ -75,6 +85,7 @@ const iPrompts = {
             choices: []
         }
     ],
+    //Prompts for the 'Update an employee role' function of the app
     updateEmployeePrompt: [
         {
             type: "list",
@@ -91,4 +102,5 @@ const iPrompts = {
     ]
 }
 
+//Exports the above prompts as a single object
 module.exports = iPrompts 

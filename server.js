@@ -134,20 +134,24 @@ const startProgram = () => {
                 viewTable('managers')
                 break;
             case 'Add a department':
+                //Pulls data from the questions.addDepartment prompt and inserts the new department into the database
                 addDepartment(answers.addDepartment)
                 break;
             case 'Add a role':
+                //Pulls the department names and id's from the database and assigns it to the choices array for the inquirer prompt
                 promiseList("departments", "name")
                     .then((results) => {
                         console.log(results)
                         iPrompts.addRolePrompt[2].choices = results;
                         return inquirer.prompt(iPrompts.addRolePrompt)
                     })
+                    //Pulls the answers from the prompt and uses them to add a role to the database
                     .then((answers) => {
                         addRole(answers.roleTitle, answers.roleSalary, answers.roleDepartment)
                     })
                 break;
             case 'Add an employee':
+                //Pulls the roles and id's from the database and assigns it to the choices array for the inquirer prompt
                 promiseList("roles", "title")
                     .then((results) => {
                         console.log(results)
@@ -159,6 +163,7 @@ const startProgram = () => {
                     })
                     break;
             case 'Add a manager':
+                //Pulls the department names and id's from the database and assigns it to the choices array for the inquirer prompt
                 promiseList("departments", "name")
                     .then((results) => {
                         console.log(results)
@@ -170,21 +175,25 @@ const startProgram = () => {
                     })
                     break;
             case 'Update an employee role':
+                //Pulls the names of the employees and their id's and assigns it to the choices array to choose an employee
                 promiseList("employees", "CONCAT(first_name, ' ', last_name)" )
                 .then((results) => {
                     console.log(results)
                     iPrompts.updateEmployeePrompt[0].choices = results;
                 })
+                //Pulls the role titles and id's and assigns them to the choices array, so the user can update the chosen employee's role based on the existing roles in the database
                 promiseList("roles", "title")
                 .then((results) => {
                     console.log(results)
                     iPrompts.updateEmployeePrompt[1].choices = results;
                     return inquirer.prompt(iPrompts.updateEmployeePrompt)
                 })
+                //Assigns the new role to the chosen employee
                 .then((answers) => {
                     updateEmployeeRole(answers.employeeChoice, answers.updateRole)
                 })
                 break;
+                //Disconnects from mysql and terminates the node processes
             case 'Disconnect':
                 db.end()
                 break;
