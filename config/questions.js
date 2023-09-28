@@ -10,9 +10,13 @@ const iPrompts = {
                 'View all roles',
                 'View all employees',
                 'View employees by manager',
+                'View employees by department',
                 'Add a department',
                 'Add a role',
                 'Add an employee',
+                'Delete a department',
+                'Delete a role',
+                'Delete an employee',
                 'Update an employee role',
                 'Disconnect']
         },
@@ -89,6 +93,33 @@ const iPrompts = {
             type: "list",
             name: "confirmManager",
             message: "Who is this employee's new manager",
+            choices: []
+        }
+    ],
+    //Prompt for the 'Delete a department' function of the app
+    deleteDepartmentPrompt: [
+        {
+            type: "list",
+            name: "deleteDepartment",
+            message: "Which department would you like to delete?",
+            choices: []
+        }
+    ],
+    //Prompt for the 'Delete a role' function of the app
+    deleteRolePrompt: [
+        {
+            type: "list",
+            name: "deleteRole",
+            message: "Which role would you like to delete?",
+            choices: []
+        }
+    ],
+    //Prompt for the 'Delete an employee' function of the app
+    deleteEmployeePrompt: [
+        {
+            type: "list",
+            name: "deleteEmployee",
+            message: "Which employee would you like to delete?",
             choices: []
         }
     ]

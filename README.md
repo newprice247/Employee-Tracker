@@ -34,9 +34,9 @@
 
 * In your MySQL shell or workbench, source the schema.sql and seeds.sql files that are located in the db folder to get the employee_tracker database and tables created and initialized. The commands should look something like this: 
 
-        mysql> source C:\Users\mattn\Bootcamp\homework\Employee-Tracker\db\schema.sql
+        mysql> source ..\Employee-Tracker\db\schema.sql
 
-        mysql> source C:\Users\mattn\Bootcamp\homework\Employee-Tracker\db\seeds.sql
+        mysql> source ..\Employee-Tracker\db\seeds.sql
 * Now that the database has some data, run 'npm start' in your terminal to start the application! 
  
 

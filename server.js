@@ -47,6 +47,16 @@ const viewTable = (tableName) => {
             FROM employees
             INNER JOIN employees as managers
             ON employees.manager_id = managers.id`
+            break;
+        case 'employees by department':
+            query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee, 
+                departments.name AS Department 
+                FROM employees
+                JOIN roles
+                ON employees.role_id = roles.id
+                JOIN departments
+                ON roles.department_id = departments.id`
+            break;
     }
     console.clear()
     db.promise().query(query)
@@ -141,6 +151,9 @@ const startProgram = () => {
                 case 'View employees by manager':
                     viewTable('employees by manager')
                     break;
+                case 'View employees by department':
+                    viewTable('employees by department')
+                    break;
                 case 'Add a department':
                     //Pulls data from the questions.addDepartment prompt and inserts the new department into the database
                     addDepartment(answers.addDepartment)
@@ -192,6 +205,48 @@ const startProgram = () => {
                         //Assigns the new role to the chosen employee
                         .then((answers) => {
                             updateEmployeeRole(answers.employeeChoice, answers.updateRole, answers.confirmManager)
+                        })
+                    break;
+                case 'Delete a department':
+                    //Pulls the department names and id's from the database and assigns it to the choices array for the inquirer prompt
+                    promiseList("departments", "name")
+                        .then((results) => {
+                            iPrompts.deleteDepartmentPrompt[0].choices = results;
+                            return inquirer.prompt(iPrompts.deleteDepartmentPrompt)
+                        })
+                        .then((answers) => {
+                            db.promise().query(`DELETE FROM departments WHERE id = ${answers.deleteDepartment}`)
+                                .then(() => console.clear())
+                                .then(() => console.log(`Department successfully deleted`))
+                                .then(() => startProgram())
+                        })
+                    break;
+                case 'Delete a role':
+                    //Pulls the role titles and id's from the database and assigns it to the choices array for the inquirer prompt
+                    promiseList("roles", "title")
+                        .then((results) => {
+                            iPrompts.deleteRolePrompt[0].choices = results;
+                            return inquirer.prompt(iPrompts.deleteRolePrompt)
+                        })
+                        .then((answers) => {
+                            db.promise().query(`DELETE FROM roles WHERE id = ${answers.deleteRole}`)
+                                .then(() => console.clear())
+                                .then(() => console.log(`Role successfully deleted`))
+                                .then(() => startProgram())
+                        })
+                    break;
+                case 'Delete an employee':
+                    //Pulls the employee names and id's from the database and assigns it to the choices array for the inquirer prompt
+                    promiseList("employees", "CONCAT(first_name, ' ', last_name)")
+                        .then((results) => {
+                            iPrompts.deleteEmployeePrompt[0].choices = results;
+                            return inquirer.prompt(iPrompts.deleteEmployeePrompt)
+                        })
+                        .then((answers) => {
+                            db.promise().query(`DELETE FROM employees WHERE id = ${answers.deleteEmployee}`)
+                                .then(() => console.clear())
+                                .then(() => console.log(`Employee successfully deleted`))
+                                .then(() => startProgram())
                         })
                     break;
                 //Disconnects from mysql and terminates the node processes
