@@ -1,29 +1,36 @@
 //Imports inquirer
 const inquirer = require('inquirer');
 //Imports mysql database credentials from local .credentials file that is gitignored and only accessible from local storage
-const creds = require('./config/.credentials')
 //Imports mysql and creates the connection to the database
 const mysql = require('mysql2');
-const db = mysql.createConnection(creds, console.log(`Connected to the Employee Tracker database.`));
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'rootpassword1',
+    database: 'employee_tracker'
+}, console.log(`Connected to the Employee Tracker database.`));
+
 // Imports inquirer prompts
 const iPrompts = require('./config/questions')
+
 
 //Uses switch statements to log the desired table to the console
 const viewTable = (tableName) => {
     let query = ``
     switch (tableName) {
         case 'departments':
-            query = `SELECT departments.name AS Department
+            query = `SELECT DISTINCT departments.name as Department, departments.id
             FROM departments`
             break;
         case 'roles':
-            query = `SELECT DISTINCT roles.title AS Role, roles.salary AS Salary, departments.name AS Department 
+            query = `SELECT DISTINCT roles.title AS Role, roles.salary AS Salary, departments.name AS Department, roles.id
             FROM roles 
             JOIN departments 
             ON roles.department_id = departments.id`
             break;
         case 'employees':
-            query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee,
+            query = `SELECT DISTINCT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee, 
+            employees.id,
             roles.title AS Role,
             departments.name AS Department
             FROM employees 
@@ -33,7 +40,7 @@ const viewTable = (tableName) => {
             ON roles.department_id = departments.id`
             break;
         case 'managers':
-            query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Manager,
+            query = `SELECT DISTINCT CONCAT(employees.first_name, ' ', employees.last_name) AS Manager,
             roles.title AS Role
             FROM employees 
             JOIN roles
@@ -41,7 +48,7 @@ const viewTable = (tableName) => {
             WHERE employees.manager_id is NULL`
             break;
         case 'employees by manager':
-            query = `SELECT
+            query = `SELECT DISTINCT
             CONCAT(employees.first_name, ' ', employees.last_name) AS Employee,
             CONCAT(managers.first_name, ' ', managers.last_name)  AS Manager
             FROM employees
@@ -49,7 +56,8 @@ const viewTable = (tableName) => {
             ON employees.manager_id = managers.id`
             break;
         case 'employees by department':
-            query = `SELECT CONCAT(employees.first_name, ' ', employees.last_name) AS Employee, 
+            query = `SELECT DISTINCT
+                CONCAT(employees.first_name, ' ', employees.last_name) AS Employee, 
                 departments.name AS Department 
                 FROM employees
                 JOIN roles
@@ -61,9 +69,12 @@ const viewTable = (tableName) => {
     console.clear()
     db.promise().query(query)
         .then(([rows, fields]) => {
-            console.table(rows)
+        // Sets the index number in the table to the id of the specific department, role, or employee
+        const newRows = rows.reduce((row, {id, title, salary, first_name, last_name, ...x}) => 
+        { row[id] = x; return row}, {})
+            console.table(newRows)
         })
-        .catch(console.log)
+        .catch((err) => console.log(err))
         .then(() => startProgram())
 }
 
@@ -174,17 +185,29 @@ const startProgram = () => {
                     //Pulls the roles and id's from the database and assigns it to the choices array for the inquirer prompt
                     promiseList("roles", "title")
                         .then((results) => {
+                            if (results.length > 0) {
                             iPrompts.addEmployeePrompt[2].choices = results;
+                            } else {
+                                console.clear()
+                                console.log('Please add a role before adding this employee')
+                            }
                         })
                     managerList()
-                        .then((results) => {
-                            iPrompts.addEmployeePrompt[3].choices = results;
+                        .then((results) => { 
+                            if (results.length > 0) {
+                            iPrompts.addEmployeePrompt[4].choices = results;
                             return inquirer.prompt(iPrompts.addEmployeePrompt)
+                        } else {
+                            console.clear();
+                            console.log('Please add a manager before adding this employee')
+                        }
                         })
                         .then((answers) => {
-                            addEmployee(answers.first_name, answers.last_name, answers.employeeRole, answers.confirmManager)
+                            if(answers) {
+                            addEmployee(answers.first_name, answers.last_name, answers.employeeRole, answers.managerChoice)
+                            } else startProgram()
                         })
-                    break;
+                    break;    
                 case 'Update an employee role':
                     //Pulls the names of the employees and their id's and assigns it to the choices array to choose an employee
                     promiseList("employees", "CONCAT(first_name, ' ', last_name)")

@@ -6,7 +6,8 @@ const iPrompts = {
             type: 'list',
             name: 'start',
             message: 'What would you like to do?',
-            choices: ['View all departments',
+            choices: [
+                'View all departments',
                 'View all roles',
                 'View all employees',
                 'View employees by manager',
@@ -48,7 +49,7 @@ const iPrompts = {
             choices: []
         }
     ],
-    //Prompt for the 'Add an employeed' function of the app
+    //Prompt for the 'Add an employee' function of the app
     addEmployeePrompt: [
         {
             type: "input",
@@ -68,10 +69,18 @@ const iPrompts = {
             choices: []
         },
         {
-            type: "list",
+            type: "confirm",
             name: "confirmManager",
+            message: "Does this employee have a manager?",
+            default: true
+        },
+        //Pulls the data from the managerList function and stores it in the empty 'choices' array
+        {
+            type: "list",
+            name: "managerChoice",
             message: "Who is this employee's manager",
-            choices: []
+            choices: [],
+            when: (answers) => answers.confirmManager === true
         }
 
     ],
